@@ -3,6 +3,7 @@ import hashlib
 with open("Inputs\Day4.txt", 'r') as q:
     lines = q.read().strip().split("\n")
     code = lines[0]
+    q.close()
 
 
 
