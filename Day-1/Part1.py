@@ -5,6 +5,7 @@ with open("Day 1\input.txt", "r") as q:
 
 floor = 0
 
+# Changing floors according to the character
 for i in command:
     if i == "(":
         floor += 1

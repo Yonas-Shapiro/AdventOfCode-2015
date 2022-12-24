@@ -4,15 +4,19 @@ with open("Inputs\Day3.txt", 'r') as q:
     q.close()
 
 
+# Initializing location variables (Santa's current location and list of past locations Santa has been)
 santa = [0, 0]
 locations = set((0, 0))
 
+
+# Getting Santa's new location
 def newLocation(command):
+    # Getting / initializing variables
     global santa
     ud = 0
     lr = 0
 
-
+    # Getting the appropriate command
     if command == "^":
         ud = -1
     elif command == ">":
@@ -22,9 +26,11 @@ def newLocation(command):
     else:
         lr = -1
 
+    # Moving Santa appropriately
     santa[0] += lr
     santa[1] += ud
 
+    # Returning Santa's new location
     return tuple(santa)
 
 

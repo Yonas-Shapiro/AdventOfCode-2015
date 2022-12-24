@@ -4,8 +4,10 @@ with open("Inputs\Day5.txt", 'r') as q:
 
 
 def checkIfNice(val):
+    # Initializing variable
     cont = False
     
+    # Checking for matching pairs
     for i in range(len(val)-3):
         start = val[i] + val[i+1]
         for j in range(i+2, len(val)-1):
@@ -17,6 +19,7 @@ def checkIfNice(val):
     if not cont:
         return 0
     
+    # Checking for separated repeating letters
     for i in range(len(val)-2):
         if val[i] == val[i+2]:
             return 1

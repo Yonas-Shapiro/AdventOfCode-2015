@@ -6,6 +6,7 @@ with open("Day 1\input.txt", 'r') as q:
 floor = 0
 character = 0
 
+# Changing floor according to the code
 for i in command:
     if i == "(":
         floor += 1
@@ -14,9 +15,10 @@ for i in command:
     else:
         print("Error")
     character += 1
-    if floor < 0:
+
+    # If the basement (floor less than 0) has been reached, then break
+    if floor < 0: 
         break
         
-
 
 print("Santa first enters the basement at character", character)
