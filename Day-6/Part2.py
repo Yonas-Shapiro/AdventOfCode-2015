@@ -8,7 +8,7 @@ grid = []
 for i in range(1000):
     grid.append([])
     for j in range(1000):
-        grid[i].append(False)
+        grid[i].append(0)
 
 
 def runCommand(input):
@@ -35,17 +35,19 @@ def runCommand(input):
         if onOff == "on":
             for i in range(in1, out1+1):
                 for j in range(in2, out2+1):
-                    grid[i][j] = True
+                    grid[i][j] += 1
         else:
             for i in range(in1, out1+1):
                 for j in range(in2, out2+1):
-                    grid[i][j] = False
+                    grid[i][j] -= 1
+                    if grid[i][j] < 0:
+                        grid[i][j] = 0
     
     # Running the toggle commands
     else:
         for i in range(in1, out1+1):
             for j in range(in2, out2+1):
-                grid[i][j] = not grid[i][j]
+                grid[i][j] += 2
 
     return
 
@@ -55,12 +57,11 @@ for command in lines:
     runCommand(command)
 
 
-on = 0
+brightness = 0
 for i in range(1000):
     for j in range(1000):
-        if grid[i][j]:
-            on += 1
+        brightness += grid[i][j]
 
 
-print(on, "lights are lit.")
+print("The total brightness is", brightness)
 
