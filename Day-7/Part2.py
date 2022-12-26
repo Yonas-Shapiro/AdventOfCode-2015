@@ -6,17 +6,24 @@ with open("Inputs\Day7.txt", 'r') as q:
 # [name, [providers] or value, command]
 properties = []
 letters = []
-
+run2 = False
+aRun1 = 0
 
 def decode(input):
     # Initializing variables
     returnVal = []
     global properties
     global letters
+    global run2
+    global aRun1
 
     command, name = input.split(" -> ")
     parts = command.split(" ")
 
+    if run2 and name == "b":
+        properties.append([name, [], "DONE", aRun1])
+        letters.append(name)
+        return
     # If there is only one command (exact number or direct translation)
     if len(parts) == 1:
         try:
@@ -73,6 +80,7 @@ def runCommand(input):
 
     index = letters.index(name)
     properties[index][2] = "DONE"
+    #print(properties[index][2])
     properties[index][3] = val
     return
 
@@ -85,7 +93,7 @@ notFoundA = True
 while notFoundA:
     for command in properties:
         if command[0] == "a" and command[2] == "DONE":
-            print("The signal ultimately provided to wire a is", command[3])
+            aRun1 = command[3]
             notFoundA = False
             break
         if command[2] != "DONE":
@@ -107,3 +115,35 @@ while notFoundA:
                 runCommand(command)
             
 
+# Running a second time for new Wire B value
+for i in range(len(properties)):
+    properties.pop()
+    letters.pop()
+run2 = True
+
+
+for command in lines:
+    decode(command)
+
+
+notFoundA = True
+while notFoundA:
+    for command in properties:
+        if command[0] == "a" and command[2] == "DONE":
+            print("The signal ultimately provided to wire a is", command[3])
+            notFoundA = False
+            break
+        if command[2] != "DONE":
+            #print(command[2])
+            moveOn = True
+            #print(command[1])
+            for parent in command[1]:
+                if isinstance(parent, str):
+                    moveOn = False
+                    index = letters.index(parent)
+                    if properties[index][2] == "DONE":
+                        #print(command[1])
+                        command[1].pop(command[1].index(parent))
+                        command[1].append(properties[index][3])
+            if moveOn:
+                runCommand(command)
