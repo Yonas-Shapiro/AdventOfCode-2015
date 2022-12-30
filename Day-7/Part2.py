@@ -17,13 +17,16 @@ def decode(input):
     global run2
     global aRun1
 
+    # Getting the input variables
     command, name = input.split(" -> ")
     parts = command.split(" ")
 
+    # Setting "B" to first run "A" for the second run
     if run2 and name == "b":
         properties.append([name, [], "DONE", aRun1])
         letters.append(name)
         return
+    
     # If there is only one command (exact number or direct translation)
     if len(parts) == 1:
         try:
@@ -35,11 +38,13 @@ def decode(input):
             letters.append(name)
             return
 
+    # Two commands means "NOT"
     elif len(parts) == 2:
         properties.append([name, [parts[1]], parts[0], -1])
         letters.append(name)
         return
 
+    # Three commands (Shift, and, or)
     else:
         if parts[0] == '1':
             parts[0] = parts[2]
@@ -55,16 +60,18 @@ def decode(input):
     return
 
 
+# Carrying out the command
 def runCommand(input):
+    # Initializing and getting variables
     global letters
     global properties
     commands = ["AND", "OR", "LSHIFT", "RSHIFT", "NOT", "IS"]
 
     # Moving the variables to individual variables
     name, inputs, command, val = input
-    #print(input)
+
+    # Getting the command and carrying it out
     num = commands.index(command)
-    #print(inputs)
     if num == 0:
         val = int(inputs[0] & inputs[1])
     elif num == 1:
@@ -78,17 +85,19 @@ def runCommand(input):
     elif num == 3:
         val = int(inputs[1] >> inputs[0])
 
+    # Changing the command to "DONE" and giving the proper value
     index = letters.index(name)
     properties[index][2] = "DONE"
-    #print(properties[index][2])
     properties[index][3] = val
     return
 
 
+# Running through the input to decode (Round 1)
 for command in lines:
     decode(command)
 
 
+# Finding the "a" value for the first run
 notFoundA = True
 while notFoundA:
     for command in properties:
@@ -98,20 +107,14 @@ while notFoundA:
             break
         if command[2] != "DONE":
             moveOn = True
-            #print(command[1])
             for parent in command[1]:
-            #for i in range(len(command)):
-                #print(moveOn, parent)
-                #print(type(parent), parent)
                 if isinstance(parent, str):
                     moveOn = False
                     index = letters.index(parent)
                     if properties[index][2] == "DONE":
-                        #print(command[1])
                         command[1].pop(command[1].index(parent))
                         command[1].append(properties[index][3])
             if moveOn:
-                #print("running moveOn")
                 runCommand(command)
             
 
@@ -122,10 +125,12 @@ for i in range(len(properties)):
 run2 = True
 
 
+# Decoding the input again
 for command in lines:
     decode(command)
 
 
+# Finding the new value for "A"
 notFoundA = True
 while notFoundA:
     for command in properties:

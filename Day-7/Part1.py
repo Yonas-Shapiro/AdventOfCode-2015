@@ -28,11 +28,13 @@ def decode(input):
             letters.append(name)
             return
 
+    # Two commands (Not)
     elif len(parts) == 2:
         properties.append([name, [parts[1]], parts[0], -1])
         letters.append(name)
         return
 
+    # Three commands (Shift, and , or)
     else:
         if parts[0] == '1':
             parts[0] = parts[2]
@@ -49,15 +51,16 @@ def decode(input):
 
 
 def runCommand(input):
+    # Initializing + getting variables
     global letters
     global properties
     commands = ["AND", "OR", "LSHIFT", "RSHIFT", "NOT", "IS"]
 
     # Moving the variables to individual variables
     name, inputs, command, val = input
-    #print(input)
+
+    # Finding out what the command is, then carrying it out
     num = commands.index(command)
-    #print(inputs)
     if num == 0:
         val = int(inputs[0] & inputs[1])
     elif num == 1:
@@ -71,16 +74,19 @@ def runCommand(input):
     elif num == 3:
         val = int(inputs[1] >> inputs[0])
 
+    # Changing the command to "DONE", and adding the proper value
     index = letters.index(name)
     properties[index][2] = "DONE"
     properties[index][3] = val
     return
 
 
+# Running through each line to decode it
 for command in lines:
     decode(command)
 
 
+# Running through the decoded results to get "A" to "DONE"
 notFoundA = True
 while notFoundA:
     for command in properties:
@@ -90,18 +96,12 @@ while notFoundA:
             break
         if command[2] != "DONE":
             moveOn = True
-            #print(command[1])
             for parent in command[1]:
-            #for i in range(len(command)):
-                #print(moveOn, parent)
-                #print(type(parent), parent)
                 if isinstance(parent, str):
                     moveOn = False
                     index = letters.index(parent)
                     if properties[index][2] == "DONE":
-                        #print(command[1])
                         command[1].pop(command[1].index(parent))
                         command[1].append(properties[index][3])
             if moveOn:
-                #print("running moveOn")
                 runCommand(command)
