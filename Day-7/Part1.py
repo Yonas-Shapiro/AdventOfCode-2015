@@ -105,5 +105,3 @@ while notFoundA:
             if moveOn:
                 #print("running moveOn")
                 runCommand(command)
-            
-
