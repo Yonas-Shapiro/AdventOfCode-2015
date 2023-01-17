@@ -20,7 +20,7 @@ def findShortestRoute(info):
             sum += info[subset[i]][subset[i+1]]
         lengths.append(sum)
     lengths.sort()
-    return lengths[-1]
+    return lengths[0]
 
 
 # Running throught the information
@@ -35,6 +35,6 @@ for line in lines:
     info[vals[1]][vals[0]] = int(vals[2])
 
 
-# Calling the function to find the shortest length
+# Calling the function to find the longest possible length
 length = findShortestRoute(info)
-print("The longest total distance to visit all locations is", length, "kilometres.")
+print("The shortest total distance to visit all locations is", length, "kilometres.")
