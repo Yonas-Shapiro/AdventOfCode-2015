@@ -16,52 +16,52 @@ def readLines(input):
     return [vals[2], vals[3], vals[4]]
 
 
-# Finding the cheapest
-def findCheapest(items, player, boss):
+# Finding the most expensive way to lose
+def findExpensive(items, player, boss):
   # Initializing the "cheapest" variable
-  cheapest = 10000
+  expensive = 0
   
   # Running through the possible combinations
   for a in items["Weapons"]:
-    # If the price is already more than the cheapest, continue
-    if a > cheapest: continue
-    player["Armor"] = 0
-    player["Damage"] = items["Weapons"][a]["Damage"]
+    # If the price is cheaper than the most expensive, add more
+    if a > expensive:
+      player["Armor"] = 0
+      player["Damage"] = items["Weapons"][a]["Damage"]
 
-    # Simulating the fight
-    if simFight(boss.copy(), player.copy()): cheapest = a
+      # Simulating the fight
+      if not simFight(boss.copy(), player.copy()): expensive = a; print(a)
 
     # Getting armour
     for b in items["Armor"]:
       # If the price is already more than the cheapest, continue
-      if a+b > cheapest: continue
+      if a+b > expensive:
 
-      # Adding to the player's stats
-      player["Damage"] = items["Weapons"][a]["Damage"]
-      player["Armor"] = items["Armor"][b]["Armor"]
-      
-      # Simulating the fight
-      if simFight(boss.copy(), player.copy()): cheapest = a+b
+        # Adding to the player's stats
+        player["Damage"] = items["Weapons"][a]["Damage"]
+        player["Armor"] = items["Armor"][b]["Armor"]
+        
+        # Simulating the fight
+        if not simFight(boss.copy(), player.copy()): expensive = a+b; print(a, b)
 
       # Checking with 1 ring
       for c in items["Rings"]:
-        if a+b+c > cheapest: continue
-        player["Damage"] = items["Weapons"][a]["Damage"] + items["Rings"][c]["Damage"]
-        player["Armor"] = items["Armor"][b]["Armor"] + items["Rings"][c]["Armor"]
-        if simFight(boss.copy(), player.copy()): cheapest = a+b+c; continue
+        if a+b+c > expensive:
+          player["Damage"] = items["Weapons"][a]["Damage"] + items["Rings"][c]["Damage"]
+          player["Armor"] = items["Armor"][b]["Armor"] + items["Rings"][c]["Armor"]
+          if not simFight(boss.copy(), player.copy()): expensive = a+b+c; print(a, b, c)
 
         # Checking a potential second ring
         for d in items["Rings"]:
-          if d == c: continue
-          if a+b+c+d > cheapest: continue
+          if c == d: continue
+          if a+b+c+d < expensive: continue
           player["Damage"] = items["Weapons"][a]["Damage"] + items["Rings"][c]["Damage"] + items["Rings"][d]["Damage"]
           player["Armor"] = items["Armor"][b]["Armor"] + items["Rings"][c]["Armor"] + items["Rings"][d]["Armor"]
-          if simFight(boss.copy(), player.copy()): cheapest = a+b+c+d
+          if not simFight(boss.copy(), player.copy()): expensive = a+b+c+d; print(a, b, c, d)
         
         
       
   
-  return cheapest
+  return expensive
 
 
 # Simulating a battle
@@ -108,4 +108,4 @@ items["Armor"][0] = {"Damage":0, "Armor":0}
 
 
 # Printing out the answer
-print("The lowest amount of gold a player can spend to beat the boss is", findCheapest(items, me, boss), "gold coins.")
+print("The greatest amount of gold a player can spend and still lose to the boss is", findExpensive(items, me, boss), "gold coins.")
