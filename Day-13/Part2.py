@@ -32,13 +32,15 @@ def getHappiest(info):
 
 
 # Compiling the input
-info = {}
+info = {"me":{}}
 for line in lines:
     inf = readLines(line)
     if inf[0] not in info:
         info[inf[0]] = {}
+        info["me"][inf[0]] = 0
     info[inf[0]][inf[1]] = inf[2]
+    info[inf[0]]["me"] = 0
 
 
 # Getting and printing the happiest possible combination's value
-print("The greatest total change in happiness is", getHappiest(info))
+print("The greatest total change in happiness with me there is", getHappiest(info))
