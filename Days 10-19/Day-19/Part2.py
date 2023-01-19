@@ -1,21 +1,33 @@
-#with open("Inputs\Day19.txt", 'r') as q:
-with open("Sample.txt", 'r') as q:
+import random
+
+with open("Inputs\Day19.txt", 'r') as q:
+#with open("Sample.txt", 'r') as q:
     lines = q.read().strip().split("\n")
     q.close()
 
 
 # Gathering the information
 def readLine(input):
-    print(input)
     start, ar, end = input.split(" ")
     return [start, end]
 
 
-# Getting all possible values
-def numPossibleValues(changes, molecule, current):
-    if current == molecule:
-        return 1
-    
+# Finding out how many turns it will take to reduce to "e"
+def numPossibleValues(changes, values, molecule):
+    mol = molecule
+    num = 0
+    while mol != "e":
+        for j in values:
+            val = mol.count(j)
+            num += val
+            mol = mol.replace(j, changes[j])
+            if mol == "e": return num
+        if mol.count("e") > 1:
+            # If multiple "e"s are in the string, there has been a failure. Run again with a different order
+            random.shuffle(values)
+            num = 0
+            mol = molecule
+    return num
     
 
 # Compiling the information
@@ -24,11 +36,12 @@ changes = {}
 for line in lines:
     if line == "": break
     x = readLine(line)
-    if x[0] not in changes:
-        changes[x[0]] = [x[1]]
-    else: changes[x[0]].append(x[1])
+    changes[x[1]] = x[0]
+values = changes.keys()
+values = sorted(values, key=len, reverse=True)
+print(values)
 
 
 # Finding out how many distinct molecules can be made
-num = numPossibleValues(changes, molecule, 'e')
+num = numPossibleValues(changes, values, molecule)
 print("It will take", num, "steps to go from \"e\" to the medecine molecule")
