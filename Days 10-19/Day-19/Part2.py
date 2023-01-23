@@ -14,10 +14,14 @@ def readLine(input):
 
 # Finding out how many turns it will take to reduce to "e"
 def numPossibleValues(changes, values, molecule):
+    check = {}
     mol = molecule
     num = 0
+    for j in values: check[j] = ""
     while mol != "e":
         for j in values:
+            # If no other changes can be made, reset.
+            if check[j] == mol: mol = "ee"
             val = mol.count(j)
             num += val
             mol = mol.replace(j, changes[j])

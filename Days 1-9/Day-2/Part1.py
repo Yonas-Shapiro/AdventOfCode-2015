@@ -1,4 +1,4 @@
-with open("Day-2\input.txt", 'r') as q:
+with open("Inputs\Day2.txt", 'r') as q:
     boxes = q.read().strip().split("\n")
     q.close()
 

@@ -1,4 +1,4 @@
-with open("Day 1\input.txt", 'r') as q:
+with open("Inputs\day1.txt", 'r') as q:
     lines = q.read().strip().split("\n")
     command = lines[0]
     q.close()
