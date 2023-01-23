@@ -1,0 +1,14 @@
+These are the instructions on how to use this copied
+
+This repository has been orgainised into four folders:
+- Days 1-9
+- Days 10-19
+- Days 20-25
+- Inputs
+
+The first three are public, but the third one is kept private as to keep the Advent of Code inputs secret.
+To run each file as-is, make a text file called "DayXX.txt" in the inputs folder.
+Otherwise, rewrite the file pathway. It should always be at the top of the file.
+
+This has been a fun journey,
+Yonas Shapiro
